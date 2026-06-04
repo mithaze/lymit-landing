@@ -1,0 +1,1094 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>LYMIT — סוכן AI שמנהל את הפניות שלך 24/7</title>
+  <meta name="description" content="סוכן AI חכם שמנהל פניות מ־WhatsApp, Instagram, Messenger ואתר העסק — 24/7 ללא הפסקה." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:           #05080f;
+      --bg2:          #070d18;
+      --bg3:          #0a1220;
+      --bg4:          #0d172a;
+      --border:       rgba(255,255,255,0.06);
+      --border-h:     rgba(10,102,255,0.35);
+      --text:         #eeeef5;
+      --muted:        #7a8fa6;
+      --muted2:       #4d6278;
+      --purple:       #0A66FF;
+      --pl:           #4DA3FF;
+      --pglow:        rgba(10,102,255,0.18);
+      --indigo:       #0052CC;
+      --green:        #25D366;
+      --green-d:      #1aad52;
+      --gglow:        rgba(37,211,102,0.22);
+      --grad:         linear-gradient(135deg,#0A66FF 0%,#0052CC 100%);
+      --gradt:        linear-gradient(135deg,#4DA3FF 0%,#0A66FF 100%);
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Heebo', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+
+    body::after {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='0.025'/%3E%3C/svg%3E");
+      pointer-events: none;
+      z-index: 9999;
+    }
+
+    /* ── REVEAL ── */
+    .reveal {
+      opacity: 0;
+      transform: translateY(30px);
+      transition: opacity 0.65s cubic-bezier(.22,1,.36,1),
+                  transform 0.65s cubic-bezier(.22,1,.36,1);
+    }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+    .d1 { transition-delay: 0.1s; }
+    .d2 { transition-delay: 0.2s; }
+    .d3 { transition-delay: 0.3s; }
+    .d4 { transition-delay: 0.4s; }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed;
+      top: 0; width: 100%;
+      z-index: 500;
+      padding: 0 5%;
+      height: 72px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: rgba(5,8,15,0.82);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--border);
+      transition: background 0.3s;
+    }
+
+    .logo-img {
+      height: 50px;
+      width: auto;
+      display: block;
+      border-radius: 10px;
+      object-fit: contain;
+    }
+
+    .nav-right {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .nav-phone {
+      color: var(--muted);
+      font-size: 0.88rem;
+      font-weight: 500;
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      transition: color 0.2s;
+    }
+    .nav-phone:hover { color: var(--text); }
+    .nav-phone .ph { direction: ltr; }
+
+    .nav-cta {
+      background: var(--green);
+      color: #fff;
+      font-weight: 700;
+      font-size: 0.88rem;
+      padding: 10px 22px;
+      border-radius: 50px;
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      transition: background 0.2s, transform 0.2s, box-shadow 0.2s;
+      white-space: nowrap;
+    }
+    .nav-cta:hover { background: var(--green-d); transform: translateY(-1px); box-shadow: 0 4px 20px var(--gglow); }
+    .nav-cta svg { width: 16px; height: 16px; flex-shrink: 0; }
+
+    @media (max-width: 600px) {
+      .nav-phone { display: none; }
+      .logo-img { height: 40px; }
+    }
+
+    /* ── HERO ── */
+    .hero {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 130px 5% 90px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hglow1 {
+      position: absolute;
+      top: -10%; left: 50%;
+      transform: translateX(-50%);
+      width: 900px; height: 900px;
+      background: radial-gradient(ellipse at center, rgba(10,102,255,.14) 0%, rgba(10,102,255,.05) 40%, transparent 70%);
+      pointer-events: none;
+    }
+    .hglow2 {
+      position: absolute;
+      bottom: -20%; right: -10%;
+      width: 600px; height: 600px;
+      background: radial-gradient(ellipse at center, rgba(10,102,255,.08) 0%, transparent 65%);
+      pointer-events: none;
+    }
+
+    .hero-eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(10,102,255,.1);
+      border: 1px solid rgba(10,102,255,.28);
+      color: var(--pl);
+      font-size: 0.8rem;
+      font-weight: 700;
+      padding: 6px 18px;
+      border-radius: 50px;
+      margin-bottom: 32px;
+      letter-spacing: 0.5px;
+      animation: fadeDown 0.6s ease both;
+    }
+
+    .hero-question {
+      font-size: clamp(1.1rem, 2.5vw, 1.4rem);
+      font-weight: 600;
+      color: var(--muted);
+      margin-bottom: 20px;
+      animation: fadeDown 0.65s ease 0.1s both;
+    }
+
+    .hero h1 {
+      font-size: clamp(2.6rem, 6.5vw, 4.8rem);
+      font-weight: 900;
+      line-height: 1.1;
+      letter-spacing: -2px;
+      max-width: 860px;
+      margin-bottom: 28px;
+      animation: fadeDown 0.7s ease 0.18s both;
+    }
+
+    .hero h1 .hl {
+      background: var(--gradt);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      display: block;
+    }
+
+    .hero-sub {
+      font-size: clamp(1rem, 2.2vw, 1.2rem);
+      color: var(--muted);
+      max-width: 600px;
+      margin-bottom: 22px;
+      line-height: 1.75;
+      font-weight: 400;
+      animation: fadeDown 0.7s ease 0.28s both;
+    }
+
+    .trust-channels {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 44px;
+      animation: fadeDown 0.7s ease 0.35s both;
+    }
+
+    .channels-row {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    .cpill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: var(--bg3);
+      border: 1px solid var(--border);
+      border-radius: 50px;
+      padding: 5px 14px;
+      font-size: 0.82rem;
+      font-weight: 600;
+      color: var(--text);
+      transition: border-color 0.2s;
+    }
+    .cpill:hover { border-color: var(--border-h); }
+
+    .cdot {
+      width: 7px; height: 7px;
+      border-radius: 50%;
+      background: var(--pl);
+      flex-shrink: 0;
+    }
+
+    .chan-tag {
+      font-size: 0.82rem;
+      color: var(--muted);
+      font-weight: 500;
+    }
+
+    .hero-ctas {
+      display: flex;
+      gap: 14px;
+      flex-wrap: wrap;
+      justify-content: center;
+      margin-bottom: 28px;
+      animation: fadeDown 0.7s ease 0.42s both;
+    }
+
+    .hero-phone {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      color: var(--muted);
+      font-size: 0.9rem;
+      text-decoration: none;
+      animation: fadeDown 0.7s ease 0.5s both;
+      transition: color 0.2s;
+    }
+    .hero-phone:hover { color: var(--text); }
+    .hero-phone .ph { font-weight: 600; direction: ltr; }
+
+    @keyframes fadeDown {
+      from { opacity: 0; transform: translateY(-16px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ── BUTTONS ── */
+    .btn-p {
+      background: var(--green);
+      color: #fff;
+      font-family: 'Heebo', sans-serif;
+      font-weight: 800;
+      font-size: 1.05rem;
+      padding: 16px 36px;
+      border-radius: 50px;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      border: none;
+      cursor: pointer;
+      transition: all 0.25s cubic-bezier(.22,1,.36,1);
+      box-shadow: 0 4px 30px var(--gglow);
+      white-space: nowrap;
+    }
+    .btn-p:hover {
+      background: var(--green-d);
+      transform: translateY(-3px);
+      box-shadow: 0 10px 40px rgba(37,211,102,.35);
+    }
+    .btn-p svg { width: 20px; height: 20px; flex-shrink: 0; fill: #fff; }
+
+    .btn-g {
+      background: transparent;
+      color: var(--text);
+      font-family: 'Heebo', sans-serif;
+      font-weight: 600;
+      font-size: 1rem;
+      padding: 15px 28px;
+      border-radius: 50px;
+      text-decoration: none;
+      border: 1px solid var(--border);
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      transition: all 0.2s;
+      white-space: nowrap;
+    }
+    .btn-g:hover { border-color: var(--purple); color: var(--pl); }
+
+    /* ── STATS STRIP ── */
+    .stats-strip {
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+      background: var(--bg2);
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+    }
+
+    .sc {
+      padding: 44px 20px;
+      text-align: center;
+      border-left: 1px solid var(--border);
+      position: relative;
+      overflow: hidden;
+    }
+    .sc:last-child { border-left: none; }
+    .sc::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 50%;
+      transform: translateX(-50%);
+      width: 60%; height: 1px;
+      background: var(--grad);
+      opacity: 0.5;
+    }
+
+    .sn {
+      font-size: 2.8rem;
+      font-weight: 900;
+      background: var(--gradt);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      line-height: 1;
+      margin-bottom: 6px;
+      letter-spacing: -1px;
+    }
+    .sl { color: var(--muted); font-size: 0.83rem; font-weight: 500; line-height: 1.4; }
+
+    @media (max-width: 640px) {
+      .stats-strip { grid-template-columns: 1fr; }
+      .sc { border-left: none; border-bottom: 1px solid var(--border); }
+      .sc:last-child { border-bottom: none; }
+      .sc::before { display: none; }
+    }
+
+    /* ── SOCIAL PROOF BANNER ── */
+    .proof-banner {
+      background: linear-gradient(135deg, rgba(10,102,255,.08) 0%, rgba(10,102,255,.04) 100%);
+      border-top: 1px solid rgba(10,102,255,.15);
+      border-bottom: 1px solid rgba(10,102,255,.15);
+      padding: 60px 5%;
+      text-align: center;
+    }
+
+    .pb-stars {
+      font-size: 1.8rem;
+      letter-spacing: 4px;
+      margin-bottom: 18px;
+      display: block;
+    }
+
+    .pb-text {
+      font-size: clamp(1rem, 2vw, 1.25rem);
+      font-weight: 500;
+      color: var(--text);
+      max-width: 680px;
+      margin: 0 auto;
+      line-height: 1.65;
+    }
+
+    .pb-text strong {
+      background: var(--gradt);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    /* ── SECTION ── */
+    .sw {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 110px 5%;
+    }
+    .sw.c { text-align: center; }
+
+    .slabel {
+      display: inline-block;
+      font-size: 0.72rem;
+      font-weight: 800;
+      letter-spacing: 2.5px;
+      text-transform: uppercase;
+      color: var(--pl);
+      margin-bottom: 16px;
+      padding: 4px 14px;
+      background: rgba(10,102,255,.08);
+      border: 1px solid rgba(10,102,255,.2);
+      border-radius: 50px;
+    }
+
+    .stitle {
+      font-size: clamp(1.9rem, 4vw, 3rem);
+      font-weight: 900;
+      letter-spacing: -.5px;
+      line-height: 1.15;
+      margin-bottom: 16px;
+    }
+
+    .ssub {
+      color: var(--muted);
+      font-size: 1.05rem;
+      line-height: 1.75;
+      max-width: 580px;
+    }
+    .ssub.c { margin: 0 auto; }
+
+    .alt { background: var(--bg2); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
+
+    /* ── PAIN CARDS ── */
+    .pain-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 18px;
+      margin-top: 56px;
+    }
+
+    .pain-card {
+      background: var(--bg3);
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      padding: 30px;
+      transition: border-color .25s, transform .25s, box-shadow .25s;
+    }
+    .pain-card:hover { border-color: var(--border-h); transform: translateY(-4px); box-shadow: 0 16px 40px rgba(0,0,0,.25); }
+    .pi { font-size: 2.2rem; margin-bottom: 14px; display: block; }
+    .pain-card h3 { font-size: 1rem; font-weight: 700; margin-bottom: 8px; }
+    .pain-card p { color: var(--muted); font-size: .88rem; line-height: 1.65; }
+
+    /* ── AUDIENCE ── */
+    .aud-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 18px;
+      margin-top: 56px;
+    }
+
+    .aud-card {
+      background: var(--bg3);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 36px 24px;
+      text-align: center;
+      transition: all .3s cubic-bezier(.22,1,.36,1);
+    }
+    .aud-card:hover {
+      border-color: var(--border-h);
+      background: var(--bg4);
+      transform: translateY(-6px);
+      box-shadow: 0 20px 50px rgba(0,0,0,.3), 0 0 0 1px rgba(10,102,255,.15);
+    }
+    .ae { font-size: 2.8rem; display: block; margin-bottom: 14px; transition: transform .3s; }
+    .aud-card:hover .ae { transform: scale(1.12); }
+    .aud-card h3 { font-size: 1.1rem; font-weight: 800; margin-bottom: 6px; }
+    .aud-card p { color: var(--muted); font-size: .82rem; line-height: 1.5; }
+
+    .aud-tag {
+      margin-top: 48px;
+      text-align: center;
+      color: var(--muted);
+      font-size: 1rem;
+      line-height: 1.65;
+      max-width: 560px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    /* ── SERVICES ── */
+    .srv-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 22px;
+      margin-top: 56px;
+    }
+
+    .srv-card {
+      background: var(--bg3);
+      border: 1px solid var(--border);
+      border-radius: 22px;
+      padding: 38px 32px;
+      position: relative;
+      overflow: hidden;
+      transition: all .3s cubic-bezier(.22,1,.36,1);
+    }
+    .srv-card::after {
+      content: '';
+      position: absolute;
+      top: -60px; right: -60px;
+      width: 180px; height: 180px;
+      background: radial-gradient(circle, var(--pglow) 0%, transparent 70%);
+      pointer-events: none;
+      opacity: 0;
+      transition: opacity .4s;
+    }
+    .srv-card:hover::after { opacity: 1; }
+    .srv-card:hover { border-color: var(--border-h); transform: translateY(-5px); box-shadow: 0 24px 50px rgba(0,0,0,.3); }
+    .srv-card.ft { border-color: rgba(10,102,255,.4); background: linear-gradient(145deg, rgba(10,102,255,.07), var(--bg3)); }
+
+    .sbadge {
+      display: inline-block;
+      background: rgba(10,102,255,.15);
+      color: var(--pl);
+      font-size: .7rem;
+      font-weight: 800;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      padding: 4px 12px;
+      border-radius: 50px;
+      margin-bottom: 20px;
+      border: 1px solid rgba(10,102,255,.2);
+    }
+    .sico { font-size: 2.6rem; margin-bottom: 18px; display: block; }
+    .srv-card h3 { font-size: 1.3rem; font-weight: 800; margin-bottom: 10px; letter-spacing: -.3px; }
+    .srv-card p { color: var(--muted); font-size: .93rem; line-height: 1.7; margin-bottom: 22px; }
+    .srv-list { list-style: none; }
+    .srv-list li { font-size: .86rem; color: var(--muted); padding: 5px 0; display: flex; align-items: center; gap: 10px; }
+    .srv-list li::before { content: ''; width: 5px; height: 5px; border-radius: 50%; background: var(--pl); flex-shrink: 0; }
+
+    /* ── STEPS ── */
+    .steps-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 0;
+      margin-top: 64px;
+      position: relative;
+    }
+    .steps-grid::before {
+      content: '';
+      position: absolute;
+      top: 38px; right: 12%; left: 12%;
+      height: 1px;
+      background: linear-gradient(to left, transparent, rgba(10,102,255,.3), rgba(10,102,255,.3), transparent);
+      pointer-events: none;
+    }
+
+    .step { text-align: center; padding: 0 24px; position: relative; }
+
+    .step-circle {
+      width: 76px; height: 76px;
+      border-radius: 50%;
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 24px;
+      font-size: 1.7rem;
+      position: relative;
+      z-index: 1;
+      transition: all .3s;
+    }
+    .step:nth-child(2) .step-circle {
+      background: linear-gradient(135deg, rgba(10,102,255,.18), rgba(10,102,255,.12));
+      border-color: rgba(10,102,255,.45);
+      box-shadow: 0 0 30px rgba(10,102,255,.12);
+    }
+    .step:hover .step-circle { border-color: rgba(10,102,255,.5); box-shadow: 0 0 24px rgba(10,102,255,.2); }
+    .step h3 { font-size: 1rem; font-weight: 800; margin-bottom: 8px; }
+    .step p { color: var(--muted); font-size: .86rem; line-height: 1.65; }
+
+    @media (max-width: 640px) {
+      .steps-grid::before { display: none; }
+      .step { padding: 0 12px 40px; }
+    }
+
+    /* ── TESTIMONIALS ── */
+    .testi-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 18px;
+      margin-top: 56px;
+    }
+
+    .testi {
+      background: var(--bg3);
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      padding: 30px;
+      transition: all .25s;
+    }
+    .testi:hover { border-color: var(--border-h); transform: translateY(-4px); box-shadow: 0 16px 40px rgba(0,0,0,.25); }
+    .testi-stars { color: #f59e0b; font-size: .85rem; margin-bottom: 14px; display: block; }
+    .testi > p { font-size: .94rem; line-height: 1.7; color: var(--text); margin-bottom: 20px; }
+    .testi .author { display: flex; align-items: center; gap: 12px; }
+    .av { width: 40px; height: 40px; border-radius: 50%; background: var(--grad); display: flex; align-items: center; justify-content: center; font-size: 1.1rem; flex-shrink: 0; }
+    .an { font-size: .87rem; font-weight: 700; display: block; }
+    .ar { font-size: .77rem; color: var(--muted); }
+
+    /* ── FAQ ── */
+    .faq-list { margin-top: 56px; max-width: 760px; margin-left: auto; margin-right: auto; }
+    .faq-item { border-bottom: 1px solid var(--border); }
+    .faq-btn {
+      width: 100%; background: none; border: none;
+      color: var(--text);
+      font-family: 'Heebo', sans-serif;
+      font-size: 1rem; font-weight: 600;
+      padding: 24px 0; text-align: right;
+      cursor: pointer;
+      display: flex; justify-content: space-between; align-items: center; gap: 12px;
+      transition: color .2s;
+    }
+    .faq-btn:hover { color: var(--pl); }
+    .faq-ico {
+      flex-shrink: 0;
+      width: 24px; height: 24px;
+      border-radius: 50%;
+      border: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: center;
+      transition: all .3s;
+      color: var(--muted);
+    }
+    .faq-item.open .faq-ico { background: var(--purple); border-color: var(--purple); color: #fff; transform: rotate(45deg); }
+    .faq-body { overflow: hidden; max-height: 0; transition: max-height .4s cubic-bezier(.22,1,.36,1); }
+    .faq-item.open .faq-body { max-height: 300px; }
+    .faq-body p { color: var(--muted); font-size: .94rem; line-height: 1.75; padding-bottom: 24px; }
+
+    /* ── CTA BLOCK ── */
+    .cta-block {
+      text-align: center;
+      padding: 120px 5%;
+      position: relative;
+      overflow: hidden;
+    }
+    .cta-block::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse at 50% 40%, rgba(10,102,255,.12) 0%, transparent 65%);
+      pointer-events: none;
+    }
+    .cta-block h2 { font-size: clamp(2rem,5vw,3.4rem); font-weight: 900; letter-spacing: -.5px; margin-bottom: 20px; line-height: 1.15; }
+    .cta-block > p { color: var(--muted); font-size: 1.1rem; max-width: 500px; margin: 0 auto 44px; line-height: 1.7; }
+    .cta-note { margin-top: 20px; font-size: .8rem; color: var(--muted2); }
+
+    .cta-ph {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      color: var(--muted);
+      text-decoration: none;
+      font-size: .92rem;
+      font-weight: 600;
+      margin-top: 20px;
+      transition: color .2s;
+    }
+    .cta-ph:hover { color: var(--text); }
+    .cta-ph .ph { direction: ltr; }
+
+    /* ── FOOTER ── */
+    footer {
+      border-top: 1px solid var(--border);
+      background: var(--bg2);
+      padding: 48px 5%;
+      text-align: center;
+    }
+    .flogo-img {
+      height: 64px;
+      width: auto;
+      display: block;
+      margin: 0 auto 20px;
+      border-radius: 12px;
+      object-fit: contain;
+    }
+    @media (max-width: 600px) {
+      .flogo-img { height: 48px; }
+    }
+    .flinks { display: flex; gap: 24px; justify-content: center; flex-wrap: wrap; margin-bottom: 20px; }
+    .flinks a { color: var(--muted); text-decoration: none; font-size: .88rem; transition: color .2s; }
+    .flinks a:hover { color: var(--text); }
+    .fcopy { color: var(--muted2); font-size: .78rem; }
+
+    /* ── STICKY WA ── */
+    .sticky-wa {
+      position: fixed;
+      bottom: 28px; left: 28px;
+      z-index: 400;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 8px;
+    }
+    .wa-tip {
+      background: var(--bg3);
+      border: 1px solid var(--border);
+      color: var(--text);
+      font-size: .78rem;
+      font-weight: 600;
+      padding: 6px 14px;
+      border-radius: 50px;
+      white-space: nowrap;
+      opacity: 0;
+      transform: translateX(-8px);
+      transition: all .25s;
+      pointer-events: none;
+    }
+    .sticky-wa:hover .wa-tip { opacity: 1; transform: translateX(0); }
+    .wa-btn {
+      width: 60px; height: 60px;
+      background: var(--green);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-decoration: none;
+      box-shadow: 0 4px 24px rgba(37,211,102,.35);
+      transition: all .25s cubic-bezier(.22,1,.36,1);
+      position: relative;
+    }
+    .wa-btn::before {
+      content: '';
+      position: absolute;
+      inset: -4px;
+      border-radius: 50%;
+      border: 2px solid rgba(37,211,102,.3);
+      animation: pulse-ring 2.5s ease infinite;
+    }
+    @keyframes pulse-ring {
+      0%  { transform: scale(1); opacity: .6; }
+      60% { transform: scale(1.25); opacity: 0; }
+      100%{ transform: scale(1.25); opacity: 0; }
+    }
+    .wa-btn:hover { background: var(--green-d); transform: scale(1.1); box-shadow: 0 8px 32px rgba(37,211,102,.5); }
+    .wa-btn svg { width: 28px; height: 28px; }
+
+    @media (max-width: 640px) {
+      .sticky-wa { bottom: 20px; left: 16px; }
+      .wa-btn { width: 54px; height: 54px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <img src="logo.png" alt="LYMIT AI Solutions" class="logo-img" />
+  <div class="nav-right">
+    <a href="tel:0523100102" class="nav-phone">📞 <span class="ph">052-310-0102</span></a>
+    <a href="https://wa.me/972523100102?text=היי%20LYMIT%2C%20אני%20רוצה%20הדגמה%20חינם" class="nav-cta" target="_blank" rel="noopener">
+      <svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51a12.8 12.8 0 00-.57-.01c-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.126.555 4.123 1.527 5.855L0 24l6.335-1.502A11.946 11.946 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.818a9.816 9.816 0 01-5.017-1.376l-.36-.214-3.727.883.934-3.618-.236-.372A9.818 9.818 0 012.182 12C2.182 6.57 6.57 2.182 12 2.182S21.818 6.57 21.818 12 17.43 21.818 12 21.818z"/></svg>
+      הדגמה חינם
+    </a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hglow1"></div>
+  <div class="hglow2"></div>
+
+  <span class="hero-eyebrow">⚡ AI לעסקים קטנים ובינוניים</span>
+  <p class="hero-question">מפספסים לידים כשאתם עסוקים?</p>
+  <h1>
+    כל פנייה מקבלת מענה תוך שניות.
+    <span class="hl">גם כשאתם ישנים.</span>
+  </h1>
+  <p class="hero-sub">סוכן AI חכם שמנהל פניות מ־WhatsApp, Instagram, Messenger ואתר העסק — 24/7 ללא הפסקה.</p>
+
+  <div class="trust-channels">
+    <div class="channels-row">
+      <span class="cpill"><span class="cdot"></span>WhatsApp</span>
+      <span class="cpill"><span class="cdot"></span>Instagram</span>
+      <span class="cpill"><span class="cdot"></span>Messenger</span>
+      <span class="cpill"><span class="cdot"></span>אתר העסק</span>
+    </div>
+    <span class="chan-tag">הכל במקום אחד. אוטומטית.</span>
+  </div>
+
+  <div class="hero-ctas">
+    <a href="https://wa.me/972523100102?text=היי%20LYMIT%2C%20אני%20רוצה%20הדגמה%20חינם" class="btn-p" target="_blank" rel="noopener">
+      <svg viewBox="0 0 24 24" fill="white"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51a12.8 12.8 0 00-.57-.01c-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.126.555 4.123 1.527 5.855L0 24l6.335-1.502A11.946 11.946 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.818a9.816 9.816 0 01-5.017-1.376l-.36-.214-3.727.883.934-3.618-.236-.372A9.818 9.818 0 012.182 12C2.182 6.57 6.57 2.182 12 2.182S21.818 6.57 21.818 12 17.43 21.818 12 21.818z"/></svg>
+      קבלו הדגמה חינם
+    </a>
+    <a href="#services" class="btn-g">ראו איך זה עובד</a>
+  </div>
+
+  <a href="tel:0523100102" class="hero-phone">📞 <span class="ph">052-310-0102</span></a>
+</section>
+
+<!-- STATS -->
+<div class="stats-strip">
+  <div class="sc reveal"><div class="sn">10+</div><div class="sl">שעות שנחסכות<br />בשבוע</div></div>
+  <div class="sc reveal d1"><div class="sn">24/7</div><div class="sl">מענה ללא הפסקה<br />בכל הערוצים</div></div>
+  <div class="sc reveal d2"><div class="sn">48h</div><div class="sl">זמן הקמה<br />ממוצע</div></div>
+</div>
+
+<!-- SOCIAL PROOF BANNER -->
+<div class="proof-banner">
+  <div class="reveal">
+    <span class="pb-stars">⭐⭐⭐⭐⭐</span>
+    <p class="pb-text">עסקים בישראל כבר משתמשים באוטומציות של <strong>LYMIT</strong> כדי לחסוך זמן, להגדיל מכירות ולשפר שירות.</p>
+  </div>
+</div>
+
+<!-- PROBLEM -->
+<section>
+  <div class="sw">
+    <span class="slabel reveal">הבעיה</span>
+    <h2 class="stitle reveal">כמה לידים איבדתם החודש<br />כי לא ענו בזמן?</h2>
+    <p class="ssub reveal">לקוח שלא מקבל מענה תוך דקות — עובר למתחרה. הסוכן שלנו עונה תמיד, תמיד.</p>
+    <div class="pain-grid">
+      <div class="pain-card reveal d1">
+        <span class="pi">📱</span>
+        <h3>פניות שנופלות בין הכיסאות</h3>
+        <p>DM באינסטגרם, הודעה בוואטסאפ, פנייה באתר — קשה לעקוב. AI עונה על הכל מיד.</p>
+      </div>
+      <div class="pain-card reveal d2">
+        <span class="pi">🕐</span>
+        <h3>אי אפשר לענות תמיד</h3>
+        <p>בשעות העבודה, בערב, בשבת — הלקוחות שולחים. הסוכן שלנו לא ישן ולא לוקח הפסקה.</p>
+      </div>
+      <div class="pain-card reveal d3">
+        <span class="pi">🔁</span>
+        <h3>אותן שאלות שוב ושוב</h3>
+        <p>כמה עולה? האם יש מקום? מה זמני ההמתנה? AI עונה בשנייה ומפנה רק את הרצינות אליכם.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- WHO IS IT FOR -->
+<section class="alt">
+  <div class="sw c">
+    <span class="slabel reveal">למי זה מתאים</span>
+    <h2 class="stitle reveal">אם אתם מקבלים פניות מלקוחות —<br />המערכת שלנו יכולה לעבוד בשבילכם</h2>
+    <div class="aud-grid">
+      <div class="aud-card reveal d1">
+        <span class="ae">💅</span>
+        <h3>מניקוריסטיות</h3>
+        <p>קביעת תורים, תזכורות,<br />מענה ללקוחות חדשים</p>
+      </div>
+      <div class="aud-card reveal d2">
+        <span class="ae">💈</span>
+        <h3>ספרים</h3>
+        <p>ניהול לוח זמנים,<br />ביטולים ושינויים אוטומטיים</p>
+      </div>
+      <div class="aud-card reveal d3">
+        <span class="ae">🔧</span>
+        <h3>מוסכים</h3>
+        <p>פניות לאבחון, תיאום<br />ביקורים, מחירונים</p>
+      </div>
+      <div class="aud-card reveal d4">
+        <span class="ae">🛠️</span>
+        <h3>בעלי מקצוע</h3>
+        <p>כל עסק שמקבל פניות<br />ורוצה להפסיק לפספס</p>
+      </div>
+    </div>
+    <p class="aud-tag reveal">"אם אתם מקבלים פניות מלקוחות — המערכת שלנו יכולה לעבוד בשבילכם."</p>
+  </div>
+</section>
+
+<!-- SERVICES -->
+<section id="services">
+  <div class="sw">
+    <span class="slabel reveal">הפתרונות שלנו</span>
+    <h2 class="stitle reveal">AI שעובד בשבילכם<br />בכל ערוץ</h2>
+    <p class="ssub reveal">לא פתרון גנרי. כל דבר מותאם לעסק שלכם, לקהל שלכם ולתהליכי העבודה שלכם.</p>
+    <div class="srv-grid">
+      <div class="srv-card ft reveal d1">
+        <span class="sbadge">הכי פופולרי</span>
+        <span class="sico">🤖</span>
+        <h3>סוכן AI לוואטסאפ</h3>
+        <p>הלקוחות שולחים הודעה — הסוכן עונה מיד, קובע תור, שולח אישור ומזכיר 24 שעות לפני.</p>
+        <ul class="srv-list">
+          <li>קביעת תורים אוטומטית</li>
+          <li>תזכורות ואישורים</li>
+          <li>מענה לשאלות נפוצות</li>
+          <li>ביטולים ושינויים</li>
+          <li>זיהוי לקוחות חוזרים</li>
+        </ul>
+      </div>
+      <div class="srv-card reveal d2">
+        <span class="sico">📲</span>
+        <h3>אוטומציה רב-ערוצית</h3>
+        <p>Instagram DM, Messenger, טפסי אתר — הכל עובר דרך מערכת אחת שמנהלת הכל.</p>
+        <ul class="srv-list">
+          <li>חיבור לכל הפלטפורמות</li>
+          <li>תגובות אוטומטיות</li>
+          <li>ניתוב לידים חמים אליכם</li>
+          <li>היסטוריית שיחות מרוכזת</li>
+        </ul>
+      </div>
+      <div class="srv-card reveal d3">
+        <span class="sico">⚡</span>
+        <h3>אוטומציות עסקיות</h3>
+        <p>תהליכים שחוזרים על עצמם — חשבוניות, מעקב לקוחות, דיווחים שבועיים — הכל רץ לבד.</p>
+        <ul class="srv-list">
+          <li>שליחת חשבוניות אוטומטית</li>
+          <li>מעקב לידים ועסקאות</li>
+          <li>חיבור CRM וגוגל קלנדר</li>
+          <li>דיווחים שבועיים</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- HOW IT WORKS -->
+<section class="alt">
+  <div class="sw c">
+    <span class="slabel reveal">איך זה עובד</span>
+    <h2 class="stitle reveal">מהיכרות ועד שה-AI<br />עובד בשבילכם — 3 שלבים</h2>
+    <p class="ssub c reveal">ללא ידע טכני. ללא סיבוכים. אנחנו מטפלים בכל.</p>
+    <div class="steps-grid">
+      <div class="step reveal d1">
+        <div class="step-circle">💬</div>
+        <h3>שיחת היכרות חינם</h3>
+        <p>מבינים מה העסק שלכם, איפה הכאב הכי גדול ומה יחסוך לכם הכי הרבה זמן.</p>
+      </div>
+      <div class="step reveal d2">
+        <div class="step-circle">⚙️</div>
+        <h3>בנייה ושילוב</h3>
+        <p>בונים את הסוכן, מחברים לפלטפורמות שלכם ובודקים שהכל עובד בדיוק כמו שצריך.</p>
+      </div>
+      <div class="step reveal d3">
+        <div class="step-circle">🚀</div>
+        <h3>מתחיל לעבוד</h3>
+        <p>תוך 48 שעות הסוכן עולה לאוויר ומתחיל לענות על פניות במקומכם.</p>
+      </div>
+    </div>
+    <div style="margin-top:56px;" class="reveal">
+      <a href="https://wa.me/972523100102?text=היי%20LYMIT%2C%20אני%20רוצה%20הדגמה%20חינם" class="btn-p" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" fill="white"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51a12.8 12.8 0 00-.57-.01c-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.126.555 4.123 1.527 5.855L0 24l6.335-1.502A11.946 11.946 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.818a9.816 9.816 0 01-5.017-1.376l-.36-.214-3.727.883.934-3.618-.236-.372A9.818 9.818 0 012.182 12C2.182 6.57 6.57 2.182 12 2.182S21.818 6.57 21.818 12 17.43 21.818 12 21.818z"/></svg>
+        קבלו הדגמה חינם
+      </a>
+      <br />
+      <a href="tel:0523100102" class="cta-ph" style="margin-top:16px;">📞 <span class="ph">052-310-0102</span></a>
+    </div>
+  </div>
+</section>
+
+<!-- TESTIMONIALS -->
+<section>
+  <div class="sw">
+    <span class="slabel reveal">לקוחות מספרים</span>
+    <h2 class="stitle reveal">עסקים שכבר עובדים פחות<br />ומרוויחים יותר</h2>
+    <div class="testi-grid">
+      <div class="testi reveal d1">
+        <span class="testi-stars">★★★★★</span>
+        <p>"הסוכן של LYMIT שינה לי את החיים. הלקוחות קובעות תורים לבד בוואטסאפ ואני לא צריכה לעצור באמצע עבודה. שעתיים ביום לפחות חזרו אלי."</p>
+        <div class="author">
+          <div class="av">💅</div>
+          <div><span class="an">מיכל כ.</span><span class="ar">טכנאית ציפורניים, תל אביב</span></div>
+        </div>
+      </div>
+      <div class="testi reveal d2">
+        <span class="testi-stars">★★★★★</span>
+        <p>"חשבתי ש-AI זה רק לחברות גדולות. תוך שבוע היה לי מערכת שעונה ללקוחות 24 שעות ביממה ומזכירה להם לשלם — לבד."</p>
+        <div class="author">
+          <div class="av">🔧</div>
+          <div><span class="an">אבי ר.</span><span class="ar">קבלן עצמאי, ראשון לציון</span></div>
+        </div>
+      </div>
+      <div class="testi reveal d3">
+        <span class="testi-stars">★★★★★</span>
+        <p>"מפסיקים לפספס לידים מאינסטגרם — הסוכן עונה מיד לכל DM. הגדלתי הכנסות ב-30% בחודש הראשון."</p>
+        <div class="author">
+          <div class="av">💈</div>
+          <div><span class="an">יוסי מ.</span><span class="ar">ספר, חיפה</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section class="alt">
+  <div class="sw c">
+    <span class="slabel reveal">שאלות נפוצות</span>
+    <h2 class="stitle reveal">כל מה שרציתם לדעת</h2>
+    <div class="faq-list" style="text-align:right;">
+      <div class="faq-item reveal">
+        <button class="faq-btn">האם אני צריך ידע טכנולוגי?<span class="faq-ico"><svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M6 1v10M1 6h10"/></svg></span></button>
+        <div class="faq-body"><p>בכלל לא. אנחנו מטפלים בכל הצד הטכני — חיבורים, הגדרות, בדיקות. אתם רואים רק את התוצאה שעובדת.</p></div>
+      </div>
+      <div class="faq-item reveal">
+        <button class="faq-btn">כמה זמן לוקח להקים את המערכת?<span class="faq-ico"><svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M6 1v10M1 6h10"/></svg></span></button>
+        <div class="faq-body"><p>רוב הפתרונות עולים לאוויר תוך 24–72 שעות. פתרונות מורכבים עם אינטגרציות מרובות עד שבוע.</p></div>
+      </div>
+      <div class="faq-item reveal">
+        <button class="faq-btn">כמה זה עולה?<span class="faq-ico"><svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M6 1v10M1 6h10"/></svg></span></button>
+        <div class="faq-body"><p>המחיר תלוי בסוג הפתרון ומספר הערוצים. בשיחת ההיכרות החינמית נציע הצעת מחיר ברורה ללא הפתעות.</p></div>
+      </div>
+      <div class="faq-item reveal">
+        <button class="faq-btn">האם זה מתחבר לכלים שאני כבר משתמש בהם?<span class="faq-ico"><svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M6 1v10M1 6h10"/></svg></span></button>
+        <div class="faq-body"><p>כן. מחברים לוואטסאפ, אינסטגרם, Messenger, גוגל קלנדר, מערכות CRM ועוד. אם אתם משתמשים בכלי — כנראה שנחבר אותו.</p></div>
+      </div>
+      <div class="faq-item reveal">
+        <button class="faq-btn">מה קורה אם משהו לא עובד?<span class="faq-ico"><svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M6 1v10M1 6h10"/></svg></span></button>
+        <div class="faq-body"><p>אנחנו לא נעלמים. תמיד יש מי לפנות אליו בוואטסאפ — ורוב הבעיות נפתרות תוך שעות ספורות.</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FINAL CTA -->
+<div class="cta-block">
+  <h2 class="reveal">מוכנים לראות את<br /><span style="background:var(--gradt);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">הסוכן שלכם בפעולה?</span></h2>
+  <p class="reveal">שיחת היכרות חינמית — נבין מה כואב לכם הכי הרבה ונראה לכם איך AI פותר את זה.</p>
+  <div class="reveal">
+    <a href="https://wa.me/972523100102?text=היי%20LYMIT%2C%20אני%20רוצה%20הדגמה%20חינם" class="btn-p" target="_blank" rel="noopener" style="font-size:1.1rem;padding:18px 44px;">
+      <svg viewBox="0 0 24 24" fill="white"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51a12.8 12.8 0 00-.57-.01c-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.126.555 4.123 1.527 5.855L0 24l6.335-1.502A11.946 11.946 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.818a9.816 9.816 0 01-5.017-1.376l-.36-.214-3.727.883.934-3.618-.236-.372A9.818 9.818 0 012.182 12C2.182 6.57 6.57 2.182 12 2.182S21.818 6.57 21.818 12 17.43 21.818 12 21.818z"/></svg>
+      קבלו הדגמה חינם
+    </a>
+  </div>
+  <p class="cta-note reveal">ללא התחייבות · ללא עלות · חוזרים אליכם תוך 24 שעות</p>
+  <a href="tel:0523100102" class="cta-ph reveal">📞 <span class="ph">052-310-0102</span></a>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <img src="logo.png" alt="LYMIT AI Solutions" class="flogo-img" />
+  <div class="flinks">
+    <a href="https://www.instagram.com/llyymit/" target="_blank" rel="noopener">@llyymit Instagram</a>
+    <a href="https://wa.me/972523100102" target="_blank" rel="noopener">WhatsApp</a>
+    <a href="tel:0523100102">📞 052-310-0102</a>
+  </div>
+  <p class="fcopy">© 2026 LYMIT · פתרונות AI לעסקים · כל הזכויות שמורות</p>
+</footer>
+
+<!-- STICKY WA -->
+<div class="sticky-wa">
+  <span class="wa-tip">קבלו הדגמה חינם</span>
+  <a href="https://wa.me/972523100102?text=היי%20LYMIT%2C%20אני%20רוצה%20הדגמה%20חינם" class="wa-btn" target="_blank" rel="noopener" aria-label="שלח הודעה בוואטסאפ">
+    <svg viewBox="0 0 24 24" fill="white" width="28" height="28"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51a12.8 12.8 0 00-.57-.01c-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.126.555 4.123 1.527 5.855L0 24l6.335-1.502A11.946 11.946 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.818a9.816 9.816 0 01-5.017-1.376l-.36-.214-3.727.883.934-3.618-.236-.372A9.818 9.818 0 012.182 12C2.182 6.57 6.57 2.182 12 2.182S21.818 6.57 21.818 12 17.43 21.818 12 21.818z"/></svg>
+  </a>
+</div>
+
+<script>
+  // Scroll reveal
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) { e.target.classList.add('visible'); io.unobserve(e.target); }
+    });
+  }, { threshold: 0.08, rootMargin: '0px 0px -32px 0px' });
+  document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+
+  // FAQ
+  document.querySelectorAll('.faq-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const item = btn.closest('.faq-item');
+      const open = item.classList.contains('open');
+      document.querySelectorAll('.faq-item.open').forEach(el => el.classList.remove('open'));
+      if (!open) item.classList.add('open');
+    });
+  });
+
+  // Nav opacity on scroll
+  const nav = document.querySelector('nav');
+  window.addEventListener('scroll', () => {
+    nav.style.background = window.scrollY > 40 ? 'rgba(5,8,15,0.97)' : 'rgba(5,8,15,0.82)';
+  }, { passive: true });
+</script>
+
+</body>
+</html>
