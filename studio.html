@@ -291,6 +291,20 @@
     /* ── DIVIDER ── */
     .rule { max-width: 120px; height: 1px; background: var(--ink); opacity: .2; margin: 0 auto; }
 
+    /* ── VIDEO REEL ── */
+    .reel { padding: 100px 8% 140px; text-align: center; }
+    .reel-head { max-width: 640px; margin: 0 auto 50px; }
+    .reel-head .k { font-size: .72rem; letter-spacing: 3px; text-transform: uppercase; color: var(--accent2); font-weight: 600; margin-bottom: 18px; display: block; }
+    .reel-head h2 { font-size: clamp(1.8rem, 3.6vw, 2.6rem); font-weight: 400; color: var(--ink); }
+    .reel-frame { max-width: 380px; margin: 0 auto; }
+    .reel-frame video {
+      width: 100%;
+      display: block;
+      border-radius: 20px;
+      box-shadow: 0 4px 10px rgba(59,42,48,.08), 0 30px 70px rgba(59,42,48,.22);
+      background: var(--paper);
+    }
+
     /* ── ROSTER ── */
     .roster {
       padding: 140px 6% 150px;
@@ -521,6 +535,19 @@
 <section class="statement">
   <span class="k reveal">מי אנחנו</span>
   <h2 class="reveal">לא סוכנות דוגמנים. <b>בית יצירה</b> שמעניק לכל מותג נוכחות מסחררת — תמונות ווידאו קמפיין עם זהויות דיגיטליות זוהרות ובלתי נשכחות, מוכנות פי כמה מהר מהפקה מסורתית.</h2>
+</section>
+
+<div class="rule"></div>
+
+<!-- REEL -->
+<section class="reel">
+  <div class="reel-head">
+    <span class="k reveal">הצי שלנו</span>
+    <h2 class="reveal">כל דוגמן, בקול שלו</h2>
+  </div>
+  <div class="reel-frame reveal-fade">
+    <video src="video/roster-reel.mp4" playsinline controls preload="metadata" poster="video/poster.jpg"></video>
+  </div>
 </section>
 
 <div class="rule"></div>
