@@ -2,3 +2,10 @@
   from = "/"
   to = "/studio.html"
   status = 200
+  force = true
+
+[[redirects]]
+  from = "/index.html"
+  to = "https://lymit-ai.com"
+  status = 301
+  force = true
